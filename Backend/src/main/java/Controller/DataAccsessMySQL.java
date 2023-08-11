@@ -1,4 +1,7 @@
 package Controller;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import javax.crypto.spec.PBEKeySpec;
 
 import Model.Account;
 import Model.Cart;
@@ -28,6 +34,43 @@ public class DataAccsessMySQL implements DataAccess{
 		}
 	}
 
+	private String generateSalt() {
+		StringBuilder builder = new StringBuilder();
+		SecureRandom r = new SecureRandom();
+
+		while(builder.length() < 32) {	
+			char newChar = (char) r.nextInt(33, 125);
+			builder.append(newChar);
+		}
+
+
+		return builder.toString();
+
+	}
+//
+//	//based on:https://howtodoinjava.com/java/java-security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+//	private String hashAndSalt(String password, String salt) {
+//		MessageDigest messageDigest;
+//		try {
+//			messageDigest = MessageDigest.getInstance("SHA-512");//to encrypt
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//
+//		byte[] bytesOfHash = messageDigest.digest((password+salt).getBytes());
+//
+//		//convert decimal bytes to hexadecimal
+//		StringBuilder sb = new StringBuilder();
+//		for(byte b: bytesOfHash) {
+//			sb.append(Integer.toHexString(b));
+//		}
+//
+//
+//		return sb.toString();
+//	}
+
+
 
 	/**
 	 * @param Account the Account object of the user to be added to the database
@@ -44,14 +87,13 @@ public class DataAccsessMySQL implements DataAccess{
 			//TODO hash password
 			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
 
-			String sqlQuery = "INSERT INTO `database`.`accounts` (`username`, `hashed_password`, `first_name`, `last_name`, `address`, `phone_number`, `province`, `country`, `billing_address`, `postal_code`, `permissions`,`email`)"
-					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);";
+			String sqlQuery = "INSERT INTO `database`.`accounts` (`username`, `hashed_password`, `first_name`, `last_name`, `address`, `phone_number`, `province`, `country`, `billing_address`, `postal_code`, `permissions`,`email`,`salt`)"
+					+ " VALUES (?, SHA2(?, 512), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 
 			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
 
 			prepStatment.setString(1, newUser.getUserName());
-			prepStatment.setString(2, password);
 			prepStatment.setString(3, newUser.getFirstName());
 			prepStatment.setString(4, newUser.getLastName());
 			prepStatment.setString(5, newUser.getAddress());
@@ -62,6 +104,14 @@ public class DataAccsessMySQL implements DataAccess{
 			prepStatment.setString(10, newUser.getPostalCode());
 			prepStatment.setString(11, permissions);
 			prepStatment.setString(12, newUser.getEmail());
+
+			//authentication stuff
+			String salt = generateSalt();
+			
+			prepStatment.setString(2, password+salt);
+			prepStatment.setString(13, salt);
+
+			
 
 			prepStatment.execute();
 
@@ -76,6 +126,8 @@ public class DataAccsessMySQL implements DataAccess{
 
 		return true;
 	}
+
+
 
 	/**
 	 * @param the username of the account needed
@@ -121,11 +173,41 @@ public class DataAccsessMySQL implements DataAccess{
 
 		return account;
 	}
+	
+	
 
 	@Override
-	public boolean isPasswordCorrect(String userName, String password) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isPasswordCorrect(String userName, String password) throws UserNotFound {
+		try {
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+			
+			String sqlQuery = "SELECT IF(SHA2(CONCAT(? ,salt), 512) = hashed_password,TRUE,FALSE)"
+					+ "FROM Accounts WHERE username = ?;";
+			
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			
+			
+			prepStatment.setString(2, userName);
+			prepStatment.setString(1, password);
+			
+			
+			ResultSet results = prepStatment.executeQuery();
+			
+			if(!(results.isBeforeFirst()))
+				throw new UserNotFound(userName);
+			
+			results.next();
+			
+			return results.getBoolean(1);
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+			
+		}
+		
 	}
 
 	@Override
@@ -248,7 +330,7 @@ public class DataAccsessMySQL implements DataAccess{
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			return null;
 		}
 

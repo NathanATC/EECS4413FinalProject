@@ -1,5 +1,5 @@
-CREATE TABLE ACCOUNTS(username Varchar(30) NOT NULL,
-hashed_password Varchar(30) NOT NULL,
+CREATE TABLE ACCOUNTS (username Varchar(30) NOT NULL,
+hashed_password CHAR(128) NOT NULL, salt Varchar(32),
 first_name Varchar(30) NOT NULL,
 last_name Varchar(30) NOT NULL,
 email Varchar(30),
@@ -11,6 +11,7 @@ billing_address Varchar(30) NOT NULL,
 postal_code Varchar(30) NOT NULL,
 permissions Enum("Customer", "admin") NOT NULL,
 PRIMARY KEY(username));
+
 
 CREATE TABLE ITEMS(item_iD varChar(10) NOT NULL,
 item_name varChar(30) NOT NULL,
