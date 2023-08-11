@@ -1,28 +1,34 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
+import {useLoginContext} from '../context/loginContext';
 import Link from 'next/link';
+import SignInPopup from './signInPopUp';
+import SignInButton from './signInButton';
 
 export default function NavBar() {
-    return(<>
-    <div class="bg-[#bfdbfe] border-2 border-[#93c5fd]">
-    <div class="h-4"></div>
-  <div class="flex justify-center">
-  <div class="relative h-16 w-16">
-    <div class= "absolute rounded-full bg-[#f8fafc] w-16 h-16 border-2 border-[#020617]"> 
+  const [showPopup, setShowPopup] = useState(false);
+
+    return(
+    <>
+    <div className="bg-[#bfdbfe] border-2 border-[#93c5fd]">
+    <div className="h-4"></div>
+  <div className="flex justify-center">
+  <div className="relative h-16 w-16">
+    <div className= "absolute rounded-full bg-[#f8fafc] w-16 h-16 border-2 border-[#020617]"> 
     </div>
-    <div class="absolute rounded-full bg-[#422006] w-8 h-8 top-4 left-2">
+    <div className="absolute rounded-full bg-[#422006] w-8 h-8 top-4 left-2">
     </div>
-    <div class="absolute rounded-full bg-[#020617] w-4 h-4 top-6 left-3">
+    <div className="absolute rounded-full bg-[#020617] w-4 h-4 top-6 left-3">
     </div>
   </div>
   </div>
-  <div class="h-4"></div>
-  <div class="flex justify-around">
-    <Link class ="rounded-full bg-[#60a5fa] " href="/catalogue" passHref>
-      <button class="px-4 py-3">Catalogue</button>
+  <div className="h-4"></div>
+  <div className="flex justify-around">
+    <Link className ="rounded-full bg-[#60a5fa]" href="/catalogue" passHref>
+      <button className="px-4 py-3">Catalogue</button>
     </Link>
-    <button class="rounded-full bg-[#60a5fa] px-8 py-1">Sign In</button>
-    <button class="rounded-full bg-[#60a5fa] px-4 py-2">
-      <svg class = "h-8 w-8 fill-current text-black-500" xmlns="http://www.w3.org/2000/svg"
+    <SignInButton onClick={()=>setShowPopup(true)}></SignInButton>
+    <button className="rounded-full bg-[#60a5fa] px-4 py-2">
+      <svg className = "h-8 w-8 fill-current text-black-500" xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 36 36">
       <path id="Selection"
         d="M 0.00,8.00
@@ -42,7 +48,8 @@ export default function NavBar() {
       </svg>
     </button>
   </div>
-  <div class="h-4"></div>
+  <div className="h-4"></div>
   </div>
+  <SignInPopup isVisible={showPopup} onClose={()=>setShowPopup(false)}/>
   </>);
 }
