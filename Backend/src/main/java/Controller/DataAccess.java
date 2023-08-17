@@ -1,7 +1,7 @@
 package Controller;
 import java.util.ArrayList;
 
-
+import Controller.DataAccess.UserNotFound;
 import Model.Account;
 import Model.Cart;
 import Model.Item;
@@ -21,7 +21,7 @@ public interface DataAccess {
 	
 	public boolean isPasswordCorrect(String userName, String password) throws UserNotFound;
 	
-	public boolean isPerm(String premissions, Account userName);
+	public boolean isPerm(String premissions, Account userName) throws UserNotFound;
 	
 	public void updatePassword(String UserName, String newPassword);
 	
@@ -31,7 +31,7 @@ public interface DataAccess {
 	
 	public ArrayList<Item> getCatalogue();
 	
-	public boolean updateUser(Account UpdatedUser);
+	public boolean updateUser(String maybeOldusername,Account updatedUser);
 	
 	public boolean updateItem(Item updatedItem);
 	

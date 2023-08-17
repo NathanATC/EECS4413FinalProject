@@ -13,7 +13,7 @@ const SignInPopup = ({isVisible, onClose}) => {
         setUsernameField("1");
         setPasswordField("2");
         console.log(body);
-        const res = await fetch("http://localhost:8080/testapi/Auth",{method:'POST',headers:new Headers({'Content-Type':'application/x-www-form-urlencoded'}),body:body});
+        const res = await fetch("http://localhost:8080/Backend/LoginServlet",{method:'POST',headers:new Headers({'Content-Type':'application/x-www-form-urlencoded'}),body:body});
         const data = await res.json()
         if(data.id == 0) {
             return;

@@ -9,7 +9,7 @@ province Varchar(30) NOT NULL,
 country Varchar(30) NOT NULL,
 billing_address Varchar(30) NOT NULL,
 postal_code Varchar(30) NOT NULL,
-permissions Enum("Customer", "admin") NOT NULL,
+permissions Enum("Customer", "Admin") NOT NULL,
 PRIMARY KEY(username));
 
 
