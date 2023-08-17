@@ -2,7 +2,7 @@
 
 import { useLoginContext } from "../context/loginContext";
 
-const accountPage = () => {
+const AccountPage = () => {
     const context = useLoginContext();
     if(context.userContext.accType == "admin"){
         return(
@@ -23,4 +23,4 @@ const accountPage = () => {
     );
 }
  
-export default accountPage;
+export default AccountPage;

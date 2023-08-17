@@ -2,14 +2,14 @@
 import {useState, useEffect} from 'react';
 import ItemDescriptionPopup from './components/itemDescription';
 
-const home = () => {
+const Home = () => {
   const [data, setData] = useState([]);
   const [itemData, setItemData] = useState({});
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("http://localhost:8080/testapi/User");
+      const res = await fetch("http://localhost:8080/Backend/catalogue");
       const fetchedData = await res.json()
       await setData(fetchedData);
     }
@@ -30,8 +30,8 @@ const home = () => {
           (item) => {
             return(
               <>
-              <div key={item.name}>
-                <h1 className="flex justify-center"><b>{item.name}</b></h1>
+              <div key={item.itemName}>
+                <h1 className="flex justify-center"><b>{item.itemName}</b></h1>
                 {item.imgSrc == "" ?
                   <div className='h-32 w-32'></div> : <img className="h-32 w-32" src={item.imgSrc} />}
                 <p className="flex justify-center">{Intl.NumberFormat('en-US', {
@@ -53,4 +53,4 @@ const home = () => {
   );
 }
 
-export default home;
+export default Home;
