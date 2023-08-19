@@ -38,7 +38,7 @@ public class ForTest {
 		
 		DataAccsessMySQL d = new DataAccsessMySQL();
 		
-		ArrayList<Item> allItems = d.getCatalogue();
+		ArrayList<Item> allItems = d.getCatalogue("","");
 		
 		for(Item i: allItems) {
 			System.out.println(i.getItemName()+" $"+i.getPrice());
