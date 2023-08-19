@@ -1,0 +1,6 @@
+"item_iD";"item_name";"category";"description";"ammount_in_stock";"price";"futureAvailability";"imagePath"
+"456";"Apple";"Fruit";"A red thing you eat";1000;2.0;"";"/asset/apple.jpg"
+"563";"Moscow Mule";"Alchol";"made form vodka, ginger, lime and a bit of mint";400;2.75;"";"/asset/moscowMule.jpeg"
+"567";"Orange";"Fruit";"A food named after a colour";1000;3.0;"";"/asset/orange.jpg"
+"678";"Beer";"Alchol";"A drink to make you stupider";1000;2.75;"";"/asset/beer.jpg"
+"890";"Bread";"Weat";"A thing for sandwiches";1000;5.0;"";"/asset/bread.jpg"
