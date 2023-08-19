@@ -7,7 +7,7 @@ import java.sql.Date;
 public class Item {
 	private String id = null;
 	private String itemName = null;
-	private Image image = null;
+	private String image = null;
 	private String category = null;
 	private String description = null;
 	private int currentQuantity = 0;
@@ -30,10 +30,10 @@ public class Item {
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
-	public Image getImage() {
+	public String getImage() {
 		return image;
 	}
-	public void setImage(Image image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	public String getCategory() {
