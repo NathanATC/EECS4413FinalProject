@@ -15,10 +15,18 @@ const SignInPopup = ({isVisible, onClose}) => {
         console.log(body);
         const res = await fetch("http://localhost:8080/Backend/LoginServlet",{method:'POST',headers:new Headers({'Content-Type':'application/x-www-form-urlencoded'}),body:body});
         const data = await res.json()
-        if(data.id == 0) {
-            return;
+        console.log(data["userName"]);
+        if(data["userName"] != null){
+           
+            console.log(data);
+            if(data.id == 0) {
+                return;
+            }
+            context.setUserContext(data);
         }
-        context.setUserContext(data);
+        else{
+            alert("Fuck off");
+        }
     }
 
     if (!isVisible) return null;

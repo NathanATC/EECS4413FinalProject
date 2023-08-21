@@ -11,31 +11,23 @@ import com.google.gson.JsonObject;
 
 public class Utilities {
 
-
+	//based on: https://stackoverflow.com/questions/1548782/retrieving-json-object-literal-from-httpservletrequest
 	public static JsonObject getJsonBody(HttpServletRequest r) {
-		StringBuilder sb = new StringBuilder();
-		
-		BufferedReader br = null;
+		BufferedReader br;
 		try {
 			br = new BufferedReader(new InputStreamReader(r.getInputStream()));
-			
-			String line;
-			while((line = br.readLine()) != null) 
-				sb.append(line);
-			
-			
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 		
-		
-		String jsonStr = sb.toString();
-		
-		JsonObject jsonObj = new Gson().fromJson(jsonStr, JsonObject.class);
+		JsonObject jsonObj = new Gson().fromJson(br, JsonObject.class);
 		
 		
 		return jsonObj;
 	}
+	
+	
 
 
 }
