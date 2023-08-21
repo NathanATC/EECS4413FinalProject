@@ -6,6 +6,7 @@ import SignInButton from "./signInButton";
 
 export default function NavBar() {
   const [showPopup, setShowPopup] = useState(false);
+  const user = useLoginContext();
 
   return (
     <>
@@ -29,7 +30,11 @@ export default function NavBar() {
           >
             <button className="px-4 py-3">Catalogue</button>
           </Link>
-          <SignInButton onClick={() => setShowPopup(true)}></SignInButton>
+          <SignInButton
+            onClick={() => {
+              user.setUserContext({ username: "jimmy123" });
+            }}
+          ></SignInButton>
           <Link href="/shoppingcart">
             <button className="rounded-full bg-[#60a5fa] px-4 py-2">
               <svg

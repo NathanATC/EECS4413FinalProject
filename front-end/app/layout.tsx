@@ -1,7 +1,6 @@
 "use client";
 
 import "./globals.css";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import NavBar from "./components/navbar";
 import { LoginContextProvider } from "./context/loginContext";
