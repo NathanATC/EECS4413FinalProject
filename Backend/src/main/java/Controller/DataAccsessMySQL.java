@@ -177,7 +177,7 @@ public class DataAccsessMySQL implements DataAccess{
 	
 
 	@Override
-	public boolean isPasswordCorrect(String userName, String password) throws UserNotFound {
+	public boolean isPasswordCorrect(String userName, String password)  {
 		try {
 			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
 			
@@ -194,7 +194,7 @@ public class DataAccsessMySQL implements DataAccess{
 			ResultSet results = prepStatment.executeQuery();
 			
 			if(!(results.isBeforeFirst()))
-				throw new UserNotFound(userName);
+				return false;
 			
 			results.next();
 			
@@ -211,14 +211,59 @@ public class DataAccsessMySQL implements DataAccess{
 	}
 
 	@Override
-	public boolean isPerm(String premissions, Account userName) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isPerm(String premissions, Account user) throws UserNotFound{
+		String sqlQuery = "SELECT permissions "
+				+ "FROM Accounts WHERE username = ?;";
+
+		Connection connection;
+		try {
+			connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			prepStatment.setString(1, user.getUserName());
+
+			ResultSet results = prepStatment.executeQuery();
+
+			if(!(results.isBeforeFirst()))
+				throw new UserNotFound(user.getUserName());
+
+			results.next();
+			return results.getString(1).equals(premissions);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
 	}
+	
 
 	@Override
-	public void updatePassword(String UserName, String newPassword) {
-		// TODO Auto-generated method stub
+	public void updatePassword(String username, String newPassword) {
+		try {
+
+			String sqlQuery = "UPDATE ACCOUNTS SET hashed_password = SHA2(?, 512), Salt = ? WHERE username = ?";
+
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+
+			String salt = generateSalt();
+
+
+
+
+			prepStatment.setString(1, newPassword+salt);
+			prepStatment.setString(2, salt);
+			prepStatment.setString(3, username);
+
+			prepStatment.execute();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 	}
 
@@ -346,9 +391,40 @@ public class DataAccsessMySQL implements DataAccess{
 	}
 
 	@Override
-	public boolean updateUser(Account UpdatedUser) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updateUser(String maybeOldUsername ,Account updatedUser) {
+		try {
+
+			String sqlQuery = "UPDATE `accounts` SET `username` = ?,"
+					+ "`first_name` = ?, `last_name` = ?, `email` = ?, "
+					+ "`address` = ?, `phone_number` = ?, `province` = ?, "
+					+ "`country` = ?, `billing_address` = ?, `postal_code` = ? "
+					+ "WHERE `username` = ?;";
+
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			
+			prepStatment.setString(1, updatedUser.getUserName());
+			prepStatment.setString(2, updatedUser.getFirstName());
+			prepStatment.setString(3, updatedUser.getLastName());
+			prepStatment.setString(4, updatedUser.getEmail());
+			prepStatment.setString(5, updatedUser.getAddress());
+			prepStatment.setString(6, updatedUser.getPhoneNumber());
+			prepStatment.setString(7, updatedUser.getProvince());
+			prepStatment.setString(8, updatedUser.getCountry());
+			prepStatment.setString(9, updatedUser.getBillingAddress());
+			prepStatment.setString(10, updatedUser.getPostalCode());
+			prepStatment.setString(11, maybeOldUsername);
+
+			prepStatment.execute();
+			
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override

@@ -19,9 +19,9 @@ public interface DataAccess {
 	
 	public Account getUser(String username);
 	
-	public boolean isPasswordCorrect(String userName, String password) throws UserNotFound;
+	public boolean isPasswordCorrect(String userName, String password);
 	
-	public boolean isPerm(String premissions, Account userName);
+	public boolean isPerm(String premissions, Account userName) throws UserNotFound;
 	
 	public void updatePassword(String UserName, String newPassword);
 	
@@ -29,7 +29,7 @@ public interface DataAccess {
 	
 	public Item getItem(String id);
 	
-	public boolean updateUser(Account UpdatedUser);
+	public boolean updateUser(String maybeOldUsername ,Account UpdatedUser);
 	
 	public boolean updateItem(Item updatedItem);
 	
