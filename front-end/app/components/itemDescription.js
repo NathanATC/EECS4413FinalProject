@@ -1,13 +1,40 @@
 import React, { useState } from "react";
 import { useCartContext } from "../context/cartContext";
+import { ItemOrder } from "../models/ItemOrder";
 
 const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
-  const { shoppingCartContext, setShoppingCartContext } = useCartContext();
+  async function addToCart() {
+    const convert = { method: "ADD", item, username: "jimmy123" };
+    const body = JSON.stringify(convert);
+    const res = await fetch("http://localhost:8080/Backend/Cart", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/x-www-form-urlencoded",
+      }),
+      body: body,
+    });
+    const json = res.json();
+    console.log(json);
+  }
 
-  const addItem = () => {
-    console.log(shoppingCartContext);
-    setShoppingCartContext([...shoppingCartContext, item]);
-  };
+  async function deleteFromCart() {
+    const convert = { method: "CLEAR", username: "jimmy123" };
+    const body = JSON.stringify(convert);
+    const res = await fetch("http://localhost:8080/Backend/Cart", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/x-www-form-urlencoded",
+      }),
+      body: body,
+    });
+    const json = res.json();
+    console.log(json);
+  }
+
+  // const addItem = () => {
+  //   // console.log(shoppingCartContext);
+  //   // setShoppingCartContext([...shoppingCartContext, order]);
+  // };
 
   if (!isVisible) return null;
   return (
@@ -46,11 +73,20 @@ const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
                   <button
                     className="rounded-full bg-[#60a5fa] px-4 py-2"
                     onClick={() => {
-                      addItem();
+                      addToCart();
                       onClose();
                     }}
                   >
                     <b>Add to Cart!</b>
+                  </button>
+                  <button
+                    className="rounded-full bg-[#60a5fa] px-4 py-2"
+                    onClick={() => {
+                      deleteFromCart();
+                      onClose();
+                    }}
+                  >
+                    <b>Clear Cart!</b>
                   </button>
                 </div>
               </div>
