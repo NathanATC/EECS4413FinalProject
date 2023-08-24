@@ -9,7 +9,7 @@ province Varchar(30) NOT NULL,
 country Varchar(30) NOT NULL,
 billing_address Varchar(30) NOT NULL,
 postal_code Varchar(30) NOT NULL,
-permissions Enum("Customer", "Admin") NOT NULL,
+permissions Enum("Customer", "Admin") NOT NULL, 
 PRIMARY KEY(username));
 
 
@@ -19,7 +19,8 @@ category varChar(30) NOT NULL,
 description varChar(100) NOT NULL,
 ammount_in_stock INT NOT NULL,
 price double NOT NULL,
-futureAvailability Date,
+futureAvailability Date, 
+image_path Varchar(50) NOT NULL,
 PRIMARY KEY(item_iD ));
 
 CREATE TABLE ORDERS(order_id VARCHAR(20) NOT NULL,

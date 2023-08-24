@@ -1,14 +1,21 @@
 import React, { useContext, useState } from "react";
-import { useLoginContext } from "../context/loginContext";
+import {LoginContext, useLoginContext} from '../context/loginContext';
 import Link from "next/link";
 import SignInPopup from "./signInPopUp";
 import SignInButton from "./signInButton";
 
 export default function NavBar() {
   const [showPopup, setShowPopup] = useState(false);
+  const context = useLoginContext();
+  const firstName = context.userContext.firstName
+  var message = "";
+  if(firstName != null){
+    message = "Hello, " + firstName 
+  }
 
   return (
     <>
+      {message}
       <div className="bg-[#bfdbfe] border-2 border-[#93c5fd]">
         <div className="h-4"></div>
         <div className="flex justify-center">

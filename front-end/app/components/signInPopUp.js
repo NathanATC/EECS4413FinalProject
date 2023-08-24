@@ -19,9 +19,7 @@ const SignInPopup = ({isVisible, onClose}) => {
         if(data["userName"] != null){
            
             console.log(data);
-            if(data.id == 0) {
-                return;
-            }
+            
             context.setUserContext(data);
         }
         else{
