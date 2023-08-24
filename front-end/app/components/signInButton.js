@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function SignInButton({ onClick }) {
   const context = useLoginContext();
+
   if (context.userContext.username) {
     return (
       <Link className="rounded-full bg-[#60a5fa] " href="/account" passHref>

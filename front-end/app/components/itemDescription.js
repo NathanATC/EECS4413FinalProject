@@ -5,19 +5,25 @@ import { ItemOrder } from "../models/ItemOrder";
 const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
   const context = useLoginContext();
   const [error, setError] = useState("");
+  const [qty, setQty] = useState(1);
 
   async function addToCart(username) {
-    const convert = { method: "ADD", item, username: username };
-    const body = JSON.stringify(convert);
-    const res = await fetch("http://localhost:8080/Backend/Cart", {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/x-www-form-urlencoded",
-      }),
-      body: body,
-    });
-    const json = res.json();
-    console.log(json);
+    if (typeof qty == "number") {
+      const convert = { method: "ADD", item, username: username, qty: qty };
+      const body = JSON.stringify(convert);
+      console.log(body);
+      const res = await fetch("http://localhost:8080/Backend/Cart", {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/x-www-form-urlencoded",
+        }),
+        body: body,
+      });
+      const json = res.json();
+      console.log(json);
+    } else {
+      alert("type number dummy");
+    }
   }
 
   async function deleteFromCart(username) {
@@ -76,12 +82,26 @@ const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
                     }).format(item.price)}
                   </p>
                 </div>
+                <div className="flex flex-col">
+                  <label for="qty">Amount:</label>
+                  <input
+                    className="w-16"
+                    type="text"
+                    id="qty"
+                    name="qty"
+                    defaultValue="1"
+                    onInput={(e) => {
+                      const tmpVal = parseInt(e.target.value, 10);
+                      setQty(tmpVal);
+                    }}
+                  />
+                </div>
                 <div className="flex flex-col justify-around">
                   <button
                     className="rounded-full bg-[#60a5fa] px-4 py-2"
                     onClick={() => {
                       if (context.userContext.username) {
-                        addToCart("jimmy123");
+                        addToCart(context.userContext.username);
                         onClose();
                       } else {
                         setError("Login to Add!");
@@ -94,7 +114,7 @@ const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
                     className="rounded-full bg-[#60a5fa] px-4 py-2"
                     onClick={() => {
                       if (context.userContext.username) {
-                        deleteFromCart("jimmy123");
+                        deleteFromCart(context.userContext.username);
                         onClose();
                       } else {
                         setError("Login to clear!");

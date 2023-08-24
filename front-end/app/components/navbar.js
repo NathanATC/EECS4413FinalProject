@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useLoginContext } from "../context/loginContext";
 import Link from "next/link";
 import SignInPopup from "./signInPopUp";
@@ -6,7 +6,15 @@ import SignInButton from "./signInButton";
 
 export default function NavBar() {
   const [showPopup, setShowPopup] = useState(false);
+
   const user = useLoginContext();
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      const acc = JSON.parse(localStorage.getItem("user"));
+      user.setUserContext(acc);
+    }
+  }, []);
 
   return (
     <>
@@ -32,7 +40,9 @@ export default function NavBar() {
           </Link>
           <SignInButton
             onClick={() => {
-              user.setUserContext({ username: "jimmy123" });
+              const obj = { username: "jimmy123" };
+              user.setUserContext(obj);
+              localStorage.setItem("user", JSON.stringify(obj));
             }}
           ></SignInButton>
           <Link href="/shoppingcart">
