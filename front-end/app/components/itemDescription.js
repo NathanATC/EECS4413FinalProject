@@ -100,7 +100,7 @@ const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
                   <button
                     className="rounded-full bg-[#60a5fa] px-4 py-2"
                     onClick={() => {
-                      if (context.userContext.username) {
+                      if (context.userContext.username != null) {
                         addToCart(context.userContext.username);
                         onClose();
                       } else {

@@ -119,7 +119,7 @@ const Catalogue = () => {
           item.id,
           item.itemName,
           item.category,
-          "",
+          item.description,
           item.currentQuantity,
           item.price,
           "",

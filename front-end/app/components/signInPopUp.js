@@ -7,9 +7,9 @@ const SignInPopup = ({ isVisible, onClose }) => {
   const context = useLoginContext();
 
   async function login(username, password) {
-    if (localStorage.getItem(user)) {
-      context.setUserContext(localStorage.getItem(user));
-    }
+    // if (localStorage.getItem(user)) {
+    //   context.setUserContext(localStorage.getItem(user));
+    // }
     const user = username;
     const pass = password;
     const body = `{username:${user},password:${pass}}`;
@@ -24,7 +24,7 @@ const SignInPopup = ({ isVisible, onClose }) => {
       body: body,
     });
     const data = await res.json();
-    if(data["userName"] != null){
+    if(data["username"] != null){
            
       console.log(data);
       
@@ -34,7 +34,7 @@ const SignInPopup = ({ isVisible, onClose }) => {
       alert("Inncorrect username or password!");
   }
 
-    context.setUserContext(data);
+    
   }
 
   if (!isVisible) return null;
@@ -75,7 +75,7 @@ const SignInPopup = ({ isVisible, onClose }) => {
               />
             </div>
             <div className="flex place-content-around">
-              <input type="submit" />
+              <button type="submit">Login</button>
               <input type="reset" />
             </div>
           </form>

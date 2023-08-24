@@ -6,8 +6,8 @@ import SignInButton from "./signInButton";
 
 export default function NavBar() {
   const [showPopup, setShowPopup] = useState(false);
-  const context = useLoginContext();
-  const firstName = context.userContext.firstName
+  const user = useLoginContext();
+  const firstName = user.userContext.firstName
   var message = "";
   if(firstName != null){
     message = "Hello, " + firstName 
@@ -21,9 +21,9 @@ export default function NavBar() {
   }, []);
 
   return (
-    <>
-      {message}
+    <>  
       <div className="bg-[#bfdbfe] border-2 border-[#93c5fd]">
+      {message}
         <div className="h-4"></div>
         <div className="flex justify-center">
           <div className="relative h-16 w-16">
@@ -45,9 +45,12 @@ export default function NavBar() {
           </Link>
           <SignInButton
             onClick={() => {
-              const obj = { username: "jimmy123" };
-              user.setUserContext(obj);
-              localStorage.setItem("user", JSON.stringify(obj));
+              // const obj = { username: "jimmy123" };
+              // user.setUserContext(obj);
+              // localStorage.setItem("user", JSON.stringify(obj));
+
+              setShowPopup(true);
+
             }}
           ></SignInButton>
           <Link href="/shoppingcart">
