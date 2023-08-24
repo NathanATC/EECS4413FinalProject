@@ -434,10 +434,62 @@ public class DataAccsessMySQL implements DataAccess{
 	}
 
 	@Override
-	public ArrayList<Order> getSalesHistory(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Order> getSalesHistory() {
+		ArrayList<Order> orders = new ArrayList<Order>();
+		try {
+			
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+			String sqlQuery = "SELECT * FROM (ORDERS JOIN ORDER_CONTENT ON ORDERS.ORDER_ID = ORDER_CONTENT.ORDER_ID)  JOIN ITEMS ON Items.Item_ID = Order_Content.Item_ID  ORDER BY ORDERS.ORDER_ID;";
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			
+			
+			
+			ResultSet results = prepStatment.executeQuery();
+			
+			String lastID = "";
+			while(results.next()) {
+				System.out.println(lastID+" "+results.getString("order_ID"));
+				
+				
+				if (lastID.equals(results.getString("order_ID")) == false) {
+					Order order = new Order();
+					order.setOrderID(results.getString("order_ID"));
+					order.setUsername(results.getString("customer_username"));
+					order.setFuffiled(results.getBoolean("is_Fulfilled"));
+					order.setOrderDate(results.getDate("order_date"));
+					order.setOrderTime(results.getTime("order_time"));
+					orders.add(order);
+				}
+				orders.get(orders.size() - 1).getAllQuanties().put(results.getString("item_id"), results.getInt("quantity"));
+				Item  i = new Item();
+
+				i.setID(results.getString("item_id"));
+				i.setItemName(results.getString("item_name"));
+				i.setCategory(results.getString("category"));
+				i.setFutureAvailability(results.getDate("futureAvailability"));
+				i.setPrice(results.getDouble("price"));
+				i.setCurrentQuantity(results.getInt("ammount_in_stock"));
+				i.setImage(results.getString("image_path"));
+				
+				orders.get(orders.size() - 1).getItems().add(i);
+				
+				lastID = results.getString("order_ID");
+				
+			}
+		
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		return orders;
 	}
+	
+	
 
 	@Override
 	public Cart getCartForAccount(Account account) {

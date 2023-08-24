@@ -1,13 +1,15 @@
 package Model;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 public class Order {
 	String orderID = null;
-	HashMap<String, Integer> order = null;
+	HashMap<String, Integer> orderQuanties = new HashMap<String, Integer>();
+	ArrayList<Item> items = new ArrayList<Item>();
 	boolean isFuffiled = false;
-	Account account = null;
+	String username = null;
 	Date orderDate = null;
 	Time orderTime = null;
 	Date fullfilmentDate = null;
@@ -17,16 +19,21 @@ public class Order {
 		
 	}
 	public Order(Cart c) {
-		order = new HashMap<String, Integer>();
-		order.putAll(c.getCart());
+		orderQuanties = new HashMap<String, Integer>();
+		orderQuanties.putAll(c.getCart());
 		
 	
 	}
+	public HashMap<String, Integer> getAllQuanties(){
+		return orderQuanties;
+	}
 	
 	public int getQunanity(String id) {
-		return order.get(id);
+		return orderQuanties.get(id);
 	}
-
+	public ArrayList<Item> getItems(){
+		return items;
+	}
 	public String getOrderID() {
 		return orderID;
 	}
@@ -43,12 +50,12 @@ public class Order {
 		this.isFuffiled = isFuffiled;
 	}
 
-	public Account getAccount() {
-		return account;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public Date getOrderDate() {
@@ -82,4 +89,6 @@ public class Order {
 	public void setFullfilmentTime(Time fullfilmentTime) {
 		this.fullfilmentTime = fullfilmentTime;
 	}
+	
+	
 }

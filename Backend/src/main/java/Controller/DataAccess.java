@@ -33,7 +33,7 @@ public interface DataAccess {
 	
 	public boolean updateItem(Item updatedItem);
 	
-	public ArrayList<Order> getSalesHistory(String userName);
+	public ArrayList<Order> getSalesHistory();
 	
 	public Cart getCartForAccount (Account account);
 
