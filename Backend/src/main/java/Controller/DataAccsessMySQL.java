@@ -444,7 +444,96 @@ public class DataAccsessMySQL implements DataAccess{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public boolean addToCart(String user, String itemId, int qty) {
+		try {
 
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+			String sqlQuery ="";
+			
+			sqlQuery = "SELECT * FROM `database`.`current_cart` WHERE costomer_username = ? AND item_id = ?;";
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			prepStatment.setString(1, user);
+			prepStatment.setString(2, itemId);
+			prepStatment.execute();
+			ResultSet r = prepStatment.getResultSet();
+			if(r.next()) {
+				System.out.println("update");
+				int tmpQ =  r.getInt("Quantity");
+
+				System.out.println(tmpQ);
+				sqlQuery = "UPDATE `database`.`current_cart` SET Quantity = ? WHERE costomer_username = ? AND item_id = ?;";
+				prepStatment = connection.prepareStatement(sqlQuery);
+				prepStatment.setInt(1, tmpQ + qty);
+				prepStatment.setString(2, user);
+				prepStatment.setString(3, itemId);
+				prepStatment.execute();
+			} else {
+				sqlQuery = "INSERT INTO `database`.`current_cart` (`costomer_username`, `item_id`, `Quantity`) VALUES (?,?,?);";
+				prepStatment = connection.prepareStatement(sqlQuery);
+				prepStatment.setString(1, user);
+				prepStatment.setString(2, itemId);
+				prepStatment.setInt(3, qty);
+				prepStatment.execute();
+			}
+			
+			
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean clearCart(String user) {
+		try {
+
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+
+			String sqlQuery = "DELETE FROM `database`.`current_cart` WHERE costomer_username=?;";
+
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			prepStatment.setString(1, user);
+			prepStatment.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+	
+	public ArrayList<Item> getCart(String user) {
+		ArrayList<Item> tmp = new ArrayList<Item>();
+		try {
+
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+
+			String sqlQuery = "SELECT * FROM current_cart as x inner join items as y ON x.item_id = y.item_iD AND x.costomer_username = ?";
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			prepStatment.setString(1, user);
+			prepStatment.execute();
+			ResultSet r = prepStatment.getResultSet();
+			while(r.next()) {
+				Item i = new Item();
+				
+				i.setID(r.getString("item_id"));
+				i.setItemName(r.getString("item_name"));
+				i.setCategory(r.getString("category"));
+				i.setFutureAvailability(r.getDate("futureAvailability"));
+				i.setPrice(r.getDouble("price"));
+				i.setCurrentQuantity(r.getInt("ammount_in_stock"));
+				i.setImage(r.getString("imagePath"));
+				i.setCurrentQuantity(r.getInt("Quantity"));
+				tmp.add(i);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return tmp;
+	}
 
 }
 

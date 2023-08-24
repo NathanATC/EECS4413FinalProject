@@ -1,6 +1,6 @@
 import React from "react";
-import {useLoginContext} from '../context/loginContext';
-import Link from 'next/link';
+import { useLoginContext } from "../context/loginContext";
+import Link from "next/link";
 
 export default function SignInButton({onClick}) {
     const context = useLoginContext();
