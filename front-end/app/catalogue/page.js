@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ItemDescriptionPopup from "../components/itemDescription";
 import Item from "../models/Item";
 
-const catalogue = () => {
+const Catalogue = () => {
   const [itemArray, setitemArray] = useState([]);
   const [displayArray, setDisplayArray] = useState([]);
   const [itemData, setItemData] = useState({});
@@ -244,4 +244,4 @@ const catalogue = () => {
   );
 };
 
-export default catalogue;
+export default Catalogue;

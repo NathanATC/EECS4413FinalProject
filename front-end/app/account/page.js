@@ -9,10 +9,11 @@ const AccountPage = () => {
 
   const logOut = () => {
     context.setUserContext("");
+    localStorage.clear();
     router.push("/");
   };
 
-  if (context.userContext.accType == "admin") {
+  if (context.userContext.permissions == "Admin") {
     return (
       <>
         <button onClick={logOut}>Log Out!</button>

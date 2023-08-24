@@ -13,6 +13,13 @@ export default function NavBar() {
     message = "Hello, " + firstName 
   }
 
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      const acc = JSON.parse(localStorage.getItem("user"));
+      user.setUserContext(acc);
+    }
+  }, []);
+
   return (
     <>
       {message}
@@ -38,7 +45,9 @@ export default function NavBar() {
           </Link>
           <SignInButton
             onClick={() => {
-              user.setUserContext({ username: "jimmy123" });
+              const obj = { username: "jimmy123" };
+              user.setUserContext(obj);
+              localStorage.setItem("user", JSON.stringify(obj));
             }}
           ></SignInButton>
           <Link href="/shoppingcart">
