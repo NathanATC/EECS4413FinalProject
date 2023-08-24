@@ -8,7 +8,7 @@ class Item {
     price,
     futureAvailability,
     imagePath,
-    qty
+    qty,brand
   ) {
     this.id = item_iD;
     this.name = item_name;
@@ -16,6 +16,7 @@ class Item {
     this.description = description;
     this.stock = amount_in_stock;
     this.price = price;
+    this.brand = brand;
     this.futureAvailability = futureAvailability;
     this.image = imagePath;
   }

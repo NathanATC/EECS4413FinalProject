@@ -11,6 +11,8 @@ public class Item {
 	private String category = null;
 	private String description = null;
 	private int currentQuantity = 0;
+	private int stock = 0;
+	private String brand;
 	private double price = 0.0;
 	private Date futureAvailability = null;
 	
