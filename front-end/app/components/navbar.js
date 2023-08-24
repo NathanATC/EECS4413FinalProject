@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {LoginContext, useLoginContext} from '../context/loginContext';
 import Link from "next/link";
 import SignInPopup from "./signInPopUp";
