@@ -46,12 +46,13 @@ public class Cart extends HttpServlet {
 		response.addHeader("Access-Control-Allow-Origin","*");
 		DataAccsessMySQL db = new DataAccsessMySQL();
 		JsonObject tmp = Utilities.getJsonBody(request);
+		System.out.println("request: "+tmp);
 		String username = tmp.get("username").getAsString();
 		String method = tmp.get("method").getAsString();
 		if(method.equals("ADD")) {
 			String id = tmp.get("item").getAsJsonObject().get("id").getAsString();
 			Gson gson = new GsonBuilder().create();
-			if(db.addToCart(username, id, 1)) {
+			if(db.addToCart(username, id, tmp.get("qty").getAsInt())) {
 				Utilities.outputRes(response, gson.toJson("Added To Cart"), 200);
 			} else {
 				Utilities.outputRes(response, gson.toJson("Error"), 200);

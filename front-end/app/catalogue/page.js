@@ -86,6 +86,7 @@ const Catalogue = () => {
   // }
 
   async function filterArray(filter, catName, brand) {
+    
     var filterFcn = null;
     if (catName && brand) {
       filterFcn = (item) => {
@@ -123,7 +124,8 @@ const Catalogue = () => {
           item.currentQuantity,
           item.price,
           "",
-          item.image
+          item.image,
+          item.brand
         )
       );
     });
@@ -132,16 +134,16 @@ const Catalogue = () => {
   }
 
   const categories = ["Fruit", "Alchol", "Weat"];
-  const brands = ["a", "b", "c"];
+  const brands = ["FruitInc", "RussiaInc", "Corona","WheatInc"];
 
   const applyFilter = (event) => {
     console.log(event.target.value);
     setFilter(event.target.value);
   };
 
-  const applyBrandFilter = (e) => {
-    console.log(e.target.value);
-    setBrandFilter(e.target.value);
+  const applyBrandFilter = (event) => {
+    console.log(event.target.value);
+    setBrandFilter(event.target.value);
   };
 
   useEffect(() => {

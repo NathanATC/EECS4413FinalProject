@@ -1,5 +1,5 @@
 package Model;
-import java.awt.Image;
+
 import java.sql.Date;
 
 
@@ -12,7 +12,7 @@ public class Item {
 	private String description = null;
 	private int currentQuantity = 0;
 	private int stock = 0;
-	private String brand;
+	private String brand = null;
 	private double price = 0.0;
 	private Date futureAvailability = null;
 	
@@ -67,6 +67,22 @@ public class Item {
 	}
 	public void setFutureAvailability(Date futureAvailability) {
 		this.futureAvailability = futureAvailability;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public int getStock() {
+		return stock;
+	}
+
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 	
 	

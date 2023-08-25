@@ -84,7 +84,6 @@ public class DataAccsessMySQL implements DataAccess{
 	@Override
 	public boolean addUser(Account newUser, String password, String permissions) {
 		try {
-			//TODO hash password
 			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
 
 			String sqlQuery = "INSERT INTO `database`.`accounts` (`username`, `hashed_password`, `first_name`, `last_name`, `address`, `phone_number`, `province`, `country`, `billing_address`, `postal_code`, `permissions`,`email`,`salt`)"
@@ -372,11 +371,14 @@ public class DataAccsessMySQL implements DataAccess{
 
 				i.setID(results.getString("item_id"));
 				i.setItemName(results.getString("item_name"));
+				i.setDescription(results.getString("description"));	
+				i.setBrand(results.getString("brand"));
 				i.setCategory(results.getString("category"));
 				i.setFutureAvailability(results.getDate("futureAvailability"));
 				i.setPrice(results.getDouble("price"));
 				i.setCurrentQuantity(results.getInt("ammount_in_stock"));
-				i.setImage(results.getString("imagePath"));
+				i.setImage(results.getString("image_path"));
+				System.out.println("sdf"+results.getString("brand"));
 				catalogue.add(i);
 			}
 
@@ -465,6 +467,8 @@ public class DataAccsessMySQL implements DataAccess{
 
 				i.setID(results.getString("item_id"));
 				i.setItemName(results.getString("item_name"));
+				i.setDescription(results.getString("description"));	
+				i.setBrand(results.getString("brand"));
 				i.setCategory(results.getString("category"));
 				i.setFutureAvailability(results.getDate("futureAvailability"));
 				i.setPrice(results.getDouble("price"));
@@ -498,46 +502,48 @@ public class DataAccsessMySQL implements DataAccess{
 	}
 	
 	public boolean addToCart(String user, String itemId, int qty) {
-		try {
+        try {
 
-			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
-			String sqlQuery ="";
-			
-			sqlQuery = "SELECT * FROM `database`.`current_cart` WHERE costomer_username = ? AND item_id = ?;";
-			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
-			prepStatment.setString(1, user);
-			prepStatment.setString(2, itemId);
-			prepStatment.execute();
-			ResultSet r = prepStatment.getResultSet();
-			if(r.next()) {
-				System.out.println("update");
-				int tmpQ =  r.getInt("Quantity");
+            Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+            String sqlQuery ="";
 
-				System.out.println(tmpQ);
-				sqlQuery = "UPDATE `database`.`current_cart` SET Quantity = ? WHERE costomer_username = ? AND item_id = ?;";
-				prepStatment = connection.prepareStatement(sqlQuery);
-				prepStatment.setInt(1, tmpQ + qty);
-				prepStatment.setString(2, user);
-				prepStatment.setString(3, itemId);
-				prepStatment.execute();
-			} else {
-				sqlQuery = "INSERT INTO `database`.`current_cart` (`costomer_username`, `item_id`, `Quantity`) VALUES (?,?,?);";
-				prepStatment = connection.prepareStatement(sqlQuery);
-				prepStatment.setString(1, user);
-				prepStatment.setString(2, itemId);
-				prepStatment.setInt(3, qty);
-				prepStatment.execute();
-			}
-			
-			
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
+            sqlQuery = "SELECT * FROM database.current_cart WHERE costomer_username = ? AND item_id = ?;";
+            PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+            prepStatment.setString(1, user);
+            prepStatment.setString(2, itemId);
+            prepStatment.execute();
+            ResultSet r = prepStatment.getResultSet();
+            if(r.next()) {
+                System.out.println("update");
+                int tmpQ =  r.getInt("Quantity");
+
+                System.out.println(tmpQ);
+                sqlQuery = "UPDATE database.current_cart SET Quantity = ? WHERE costomer_username = ? AND item_id = ?;";
+                prepStatment = connection.prepareStatement(sqlQuery);
+                prepStatment.setInt(1, tmpQ + qty);
+                prepStatment.setString(2, user);
+                prepStatment.setString(3, itemId);
+                prepStatment.execute();
+            } else {
+                sqlQuery = "INSERT INTO database.current_cart (costomer_username, item_id, Quantity) VALUES (?,?,?);";
+                prepStatment = connection.prepareStatement(sqlQuery);
+                prepStatment.setString(1, user);
+                prepStatment.setString(2, itemId);
+                prepStatment.setInt(3, qty);
+                prepStatment.execute();
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+
 	public boolean clearCart(String user) {
 		try {
 
@@ -572,11 +578,12 @@ public class DataAccsessMySQL implements DataAccess{
 				
 				i.setID(r.getString("item_id"));
 				i.setItemName(r.getString("item_name"));
+				i.setDescription(r.getString("description"));	
+				i.setBrand(r.getString("brand"));
 				i.setCategory(r.getString("category"));
 				i.setFutureAvailability(r.getDate("futureAvailability"));
 				i.setPrice(r.getDouble("price"));
-				i.setCurrentQuantity(r.getInt("ammount_in_stock"));
-				i.setImage(r.getString("imagePath"));
+				i.setImage(r.getString("image_path"));
 				i.setCurrentQuantity(r.getInt("Quantity"));
 				tmp.add(i);
 			}
@@ -585,6 +592,44 @@ public class DataAccsessMySQL implements DataAccess{
 		}
 
 		return tmp;
+	}
+	
+	public ArrayList<Item> topItems(int topWhat){
+		ArrayList<Item> topItems =  new ArrayList<Item>();
+		
+		Connection connection;
+		try {
+			connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+
+			String sqlQuery = "SELECT  *, SUM(Items.price * ORDER_CONTENT.Quantity) AS moneyMade FROM (ORDERS JOIN ORDER_CONTENT ON ORDERS.ORDER_ID = ORDER_CONTENT.ORDER_ID)  JOIN ITEMS ON Items.Item_ID = Order_Content.Item_ID  Group by items.item_ID ORDER BY moneyMade DESC;";
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
+			
+			ResultSet r = prepStatment.executeQuery();
+			
+			while(r.next() && topItems.size() < topWhat) {
+				Item i = new Item();
+				
+				i.setID(r.getString("item_id"));
+				i.setItemName(r.getString("item_name"));
+				i.setDescription(r.getString("description"));	
+				i.setBrand(r.getString("brand"));
+				i.setCategory(r.getString("category"));
+				i.setFutureAvailability(r.getDate("futureAvailability"));
+				i.setPrice(r.getDouble("price"));
+				i.setImage(r.getString("image_path"));
+				i.setCurrentQuantity(r.getInt("Quantity"));
+				
+				topItems.add(i);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
+		return topItems;
 	}
 
 }

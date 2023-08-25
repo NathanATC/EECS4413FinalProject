@@ -9,7 +9,7 @@ const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   async function fetchData() {
-    const res = await fetch("http://localhost:8080/Backend/catalogue");
+    const res = await fetch("http://localhost:8080/Backend/HotProducts");
     const fetchedData = await res.json();
     const convert = [];
     fetchedData.map((item) => {
@@ -18,11 +18,12 @@ const Home = () => {
           item.id,
           item.itemName,
           item.category,
-          "",
+          item.discription,
           item.currentQuantity,
           item.price,
           "",
-          item.image
+          item.image,
+          item.brand
         )
       );
     });

@@ -8,7 +8,8 @@ class Item {
     price,
     futureAvailability,
     imagePath,
-    qty,brand
+    //qty,
+    brand
   ) {
     this.id = item_iD;
     this.name = item_name;

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Account {
 	
-	private String userName = null;
+	private String username = null;
 	private String email = null;
 	private String address = null;
 	private String phoneNumber = null;
@@ -21,11 +21,11 @@ public class Account {
 	}
 	
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.username = userName;
 	}
 
 	public String getEmail() {

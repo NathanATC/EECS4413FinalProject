@@ -1,6 +1,11 @@
 package ForTest;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.google.gson.Gson;
 
 import Controller.DataAccsessMySQL;
 import Model.Account;
@@ -36,13 +41,19 @@ public class ForTest {
 //		i.setDescription("is food that tastes like food");
 	
 		
-		DataAccsessMySQL d = new DataAccsessMySQL();
+//		DataAccsessMySQL d = new DataAccsessMySQL();
+//		
+//		Gson g = new Gson();
+//		System.out.println(g.toJson(d.getSalesHistory()));
+	
 		
-		ArrayList<Item> allItems = d.getCatalogue("","");
+//		ArrayList<Item> allItems = d.getCatalogue("","");
+//		
+//		for(Item i: allItems) {
+//			System.out.println(i.getItemName()+" $"+i.getPrice());
+//		}
 		
-		for(Item i: allItems) {
-			System.out.println(i.getItemName()+" $"+i.getPrice());
-		}
+		
 
 	}
 
