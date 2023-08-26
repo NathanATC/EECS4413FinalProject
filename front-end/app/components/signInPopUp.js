@@ -13,9 +13,7 @@ const SignInPopup = ({ isVisible, onClose }) => {
     // }
     const user = username;
     const pass = password;
-    const body = `{username:${user},password:${pass}}`;
-    setUsernameField("1");
-    setPasswordField("2");
+    const body = `{"username":"${user}","password":"${pass}"}`;
     console.log(body);
     const res = await fetch("http://localhost:8080/Backend/LoginServlet", {
       method: "POST",
@@ -25,6 +23,7 @@ const SignInPopup = ({ isVisible, onClose }) => {
       body: body,
     });
     const data = await res.json();
+    console.log(data);
     if (data["username"] != null) {
       console.log(data);
 

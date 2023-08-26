@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const SignUp = () => {
   const [username, setUserName] = useState("");
@@ -88,8 +88,11 @@ const SignUp = () => {
       }),
       body: body,
     });
-    const data = await res.json();
-    console.log(data);
+    if (res.status == 200) {
+      alert("Account Created!");
+    } else {
+      alert("Please try again!");
+    }
   }
 
   return (
