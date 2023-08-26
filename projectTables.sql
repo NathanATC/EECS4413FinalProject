@@ -24,7 +24,7 @@ futureAvailability Date,
 image_path Varchar(50) NOT NULL,
 PRIMARY KEY(item_iD ));
 
-CREATE TABLE ORDERS(order_id VARCHAR(20) NOT NULL,
+CREATE TABLE ORDERS(order_id INT NOT NULL AUTO_INCREMENT,
 customer_user_name VARCHAR(10) NOT NULL,
 order_date DATE NOT NULL,
 order_time TIME NOT NULL,
@@ -32,7 +32,7 @@ is_fulfilled BOOLEAN NOT NULL,
 PRIMARY KEY(order_id),
 FOREIGN KEY(customer_user_name) REFERENCES  ACCOUNTS(username));
 
-CREATE TABLE ORDER_CONTENT(order_id VARCHAR(10) NOT NULL,
+CREATE TABLE ORDER_CONTENT(order_id INT NOT NULL,
 item_iD VARCHAR(10) NOT NULL,
 Quantity INT NOT NULL,
 FOREIGN KEY(order_id) REFERENCES ORDERS(order_id),

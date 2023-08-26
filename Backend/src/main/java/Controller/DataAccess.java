@@ -35,7 +35,6 @@ public interface DataAccess {
 	
 	public ArrayList<Order> getSalesHistory();
 	
-	public Cart getCartForAccount (Account account);
 
 	public ArrayList<Item> getCatalogue(String filterType, String filter);
 }
