@@ -482,7 +482,7 @@ public class DataAccsessMySQL implements DataAccess{
 				if (lastID.equals(results.getString("order_ID")) == false) {
 					Order order = new Order();
 					order.setOrderID(results.getString("order_ID"));
-					order.setUsername(results.getString("customer_username"));
+					order.setUsername(results.getString("customer_user_name"));
 					order.setFuffiled(results.getBoolean("is_Fulfilled"));
 					order.setOrderDate(results.getDate("order_date"));
 					order.setOrderTime(results.getTime("order_time"));
@@ -505,11 +505,12 @@ public class DataAccsessMySQL implements DataAccess{
 				
 				lastID = results.getString("order_ID");
 				
-				connection.close();
 
 				
 			}
 		
+			connection.close();
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -716,13 +717,7 @@ public class DataAccsessMySQL implements DataAccess{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		
-		
-		
-		
+		}	
 		
 	}
 
