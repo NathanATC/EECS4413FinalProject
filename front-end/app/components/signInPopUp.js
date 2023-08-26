@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import { useLoginContext } from "../context/loginContext";
+import Link from "next/link";
 
 const SignInPopup = ({ isVisible, onClose }) => {
   const [usernameField, setUsernameField] = useState("1");
@@ -24,17 +25,13 @@ const SignInPopup = ({ isVisible, onClose }) => {
       body: body,
     });
     const data = await res.json();
-    if(data["username"] != null){
-           
+    if (data["username"] != null) {
       console.log(data);
-      
-      context.setUserContext(data);
-  }
-  else{
-      alert("Inncorrect username or password!");
-  }
 
-    
+      context.setUserContext(data);
+    } else {
+      alert("Inncorrect username or password!");
+    }
   }
 
   if (!isVisible) return null;
@@ -77,6 +74,9 @@ const SignInPopup = ({ isVisible, onClose }) => {
             <div className="flex place-content-around">
               <button type="submit">Login</button>
               <input type="reset" />
+              <Link href="/signup" passHref>
+                <button>Create Account</button>
+              </Link>
             </div>
           </form>
         </div>

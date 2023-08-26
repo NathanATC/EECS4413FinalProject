@@ -46,7 +46,6 @@ public class CreateAccount extends HttpServlet {
 			newUser.setEmail(requestJson.get("email").getAsString());
 			newUser.setPostalCode(requestJson.get("postalCode").getAsString());
 			
-			
 			String password = requestJson.get("password").getAsString();
 			String premissions = requestJson.get("premissions").getAsString();
 			
@@ -55,9 +54,6 @@ public class CreateAccount extends HttpServlet {
 			response.getWriter().print("somthing went wrong");
 			e.printStackTrace();
 		}
-		
-		
-		
 		
 	}
 
