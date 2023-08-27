@@ -32,6 +32,9 @@ public class DataAccsessMySQL implements DataAccess{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -409,7 +412,7 @@ public class DataAccsessMySQL implements DataAccess{
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-			return [];
+			return null;
 		}
 
 
