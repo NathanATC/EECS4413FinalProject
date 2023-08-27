@@ -113,7 +113,7 @@ public class DataAccsessMySQL implements DataAccess{
 			
 
 			prepStatment.execute();
-
+			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,7 +163,8 @@ public class DataAccsessMySQL implements DataAccess{
 
 			prepStatment.execute();
 
-
+			connection.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -197,7 +198,16 @@ public class DataAccsessMySQL implements DataAccess{
 			
 			results.next();
 			
-			return results.getBoolean(1);
+			
+			
+			
+			
+			boolean isTrue = results.getBoolean(1);
+			
+			connection.close();
+			
+			return isTrue;
+			
 			
 			
 			
@@ -227,6 +237,10 @@ public class DataAccsessMySQL implements DataAccess{
 				throw new UserNotFound(user.getUserName());
 
 			results.next();
+			
+			connection.close();
+
+			
 			return results.getString(1).equals(premissions);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -257,6 +271,9 @@ public class DataAccsessMySQL implements DataAccess{
 			prepStatment.setString(3, username);
 
 			prepStatment.execute();
+			
+			connection.close();
+
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -288,6 +305,7 @@ public class DataAccsessMySQL implements DataAccess{
 
 			prepStatment.execute();
 
+			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -325,6 +343,7 @@ public class DataAccsessMySQL implements DataAccess{
 			i.setPrice(results.getDouble("price"));
 			i.setCurrentQuantity(results.getInt("ammount_in_stock"));
 
+			connection.close();
 
 
 		} catch (SQLException e) {
@@ -335,6 +354,7 @@ public class DataAccsessMySQL implements DataAccess{
 
 		return i;
 
+		
 
 
 
@@ -381,6 +401,9 @@ public class DataAccsessMySQL implements DataAccess{
 				System.out.println("sdf"+results.getString("brand"));
 				catalogue.add(i);
 			}
+			
+			connection.close();
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -420,6 +443,9 @@ public class DataAccsessMySQL implements DataAccess{
 
 			prepStatment.execute();
 			
+			connection.close();
+
+			
 			return true;
 
 		} catch (SQLException e) {
@@ -456,7 +482,7 @@ public class DataAccsessMySQL implements DataAccess{
 				if (lastID.equals(results.getString("order_ID")) == false) {
 					Order order = new Order();
 					order.setOrderID(results.getString("order_ID"));
-					order.setUsername(results.getString("customer_username"));
+					order.setUsername(results.getString("customer_user_name"));
 					order.setFuffiled(results.getBoolean("is_Fulfilled"));
 					order.setOrderDate(results.getDate("order_date"));
 					order.setOrderTime(results.getTime("order_time"));
@@ -479,8 +505,12 @@ public class DataAccsessMySQL implements DataAccess{
 				
 				lastID = results.getString("order_ID");
 				
+
+				
 			}
 		
+			connection.close();
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -495,11 +525,7 @@ public class DataAccsessMySQL implements DataAccess{
 	
 	
 
-	@Override
-	public Cart getCartForAccount(Account account) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	
 	public boolean addToCart(String user, String itemId, int qty) {
         try {
@@ -533,6 +559,7 @@ public class DataAccsessMySQL implements DataAccess{
                 prepStatment.execute();
             }
 
+			connection.close();
 
 
         } catch (SQLException e) {
@@ -554,6 +581,9 @@ public class DataAccsessMySQL implements DataAccess{
 			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery);
 			prepStatment.setString(1, user);
 			prepStatment.execute();
+			
+			connection.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -587,6 +617,9 @@ public class DataAccsessMySQL implements DataAccess{
 				i.setCurrentQuantity(r.getInt("Quantity"));
 				tmp.add(i);
 			}
+			
+			connection.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -622,6 +655,9 @@ public class DataAccsessMySQL implements DataAccess{
 				topItems.add(i);
 				
 			}
+			
+			connection.close();
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -630,6 +666,59 @@ public class DataAccsessMySQL implements DataAccess{
 		
 		
 		return topItems;
+	}
+
+	public void addOrdertoDataBase(String username) {
+		String sqlQuery = "INSERT INTO ORDERS(CUSTOMER_USER_NAME,ORDER_DATE,ORDER_TIME,is_fulfilled) VALUES(?,?,?,?)";
+		
+		Connection connection;
+		try {
+			connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
+			
+			PreparedStatement prepStatment = connection.prepareStatement(sqlQuery,PreparedStatement.RETURN_GENERATED_KEYS);
+			
+			prepStatment.setString(1, username);
+			
+			java.sql.Date currDate = new java.sql.Date(System.currentTimeMillis());
+			prepStatment.setDate(2, currDate);
+			
+			java.sql.Time currTime = new java.sql.Time(System.currentTimeMillis());
+			prepStatment.setTime(3, currTime);
+			
+			prepStatment.setBoolean(4, false);
+			
+			
+			prepStatment.execute();
+			
+			ResultSet rs = prepStatment.getGeneratedKeys();
+			rs.next();
+			int orderID = rs.getInt(1);
+			
+			sqlQuery = "INSERT INTO ORDER_CONTENT  (order_ID,item_ID,quantity) "
+					+ "SELECT ? ,item_id, quantity FROM CURRENT_CART "
+					+ "Where costomer_username = ?";
+			
+			prepStatment = connection.prepareStatement(sqlQuery);
+			prepStatment.setInt(1, orderID);
+			prepStatment.setString(2, username);
+			prepStatment.execute();
+			
+			this.clearCart(username);
+			
+			connection.close();
+			
+			
+			
+			
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import Model.Account;
@@ -31,7 +32,10 @@ public class CreateAccount extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			response.addHeader("Access-Control-Allow-Origin","*");
+			
 			JsonObject requestJson = Utilities.getJsonBody(request);
+			Gson g = new Gson();
 			
 			Account newUser = new Account();
 			
@@ -46,14 +50,21 @@ public class CreateAccount extends HttpServlet {
 			newUser.setEmail(requestJson.get("email").getAsString());
 			newUser.setPostalCode(requestJson.get("postalCode").getAsString());
 			
+			
 			String password = requestJson.get("password").getAsString();
 			String premissions = requestJson.get("premissions").getAsString();
 			
+			
 			new DataAccsessMySQL().addUser(newUser, password, premissions);
+			
+			Utilities.outputRes(response, g.toJson(newUser) , 200);
 		} catch (Exception e) {
 			response.getWriter().print("somthing went wrong");
 			e.printStackTrace();
 		}
+		
+		
+		
 		
 	}
 

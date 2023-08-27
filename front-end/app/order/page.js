@@ -1,7 +1,23 @@
 "use client";
+import { useLoginContext } from "../context/loginContext";
+
 import React, { useState } from "react";
 
 const Order = () => {
+  const context = useLoginContext();
+
+  async function placeOrder(username) {
+    const convert = { method: "POST", username: username };
+    const body = JSON.stringify(convert);
+    const res = await fetch("http://localhost:8080/Backend/CheckoutServlet", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/x-www-form-urlencoded",
+      }),
+      body: body,
+    });
+  }
+
   const [cardNum, setCardNum] = useState("");
   const [cardExpire, setCardExpire] = useState("");
   const [cvc, setCvc] = useState("");
@@ -66,6 +82,15 @@ const Order = () => {
           <button>Submit Order!</button>
         </div>
       </div>
+
+      <button
+        onClick={async () => {
+          await placeOrder(context.userContext.username);
+        }}
+      >
+        {" "}
+        <b>place order</b>{" "}
+      </button>
     </>
   );
 };

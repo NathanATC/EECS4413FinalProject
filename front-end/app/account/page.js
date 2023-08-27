@@ -17,7 +17,6 @@ const AccountPage = () => {
     return (
       <>
         <button onClick={logOut}>Log Out!</button>
-        <h1>Fuck You</h1>
       </>
     );
   }
