@@ -1,21 +1,17 @@
 package Controller;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import javax.crypto.spec.PBEKeySpec;
+import java.util.ArrayList;
+
 
 import Model.Account;
-import Model.Cart;
+
 import Model.Item;
 import Model.Order;
 
