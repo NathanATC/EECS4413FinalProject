@@ -8,8 +8,8 @@ RUN mvn clean install
 FROM tomcat:9.0-jdk11
 
 # Copy wait-for-it.sh and give it the necessary permissions
-COPY wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
+# COPY wait-for-it.sh /wait-for-it.sh
+# RUN chmod +x /wait-for-it.sh
 
 # Copy the built artifact from builder
 COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
@@ -18,5 +18,5 @@ COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
 EXPOSE 8080
 
 # Run wait-for-it.sh before starting Tomcat
-ENTRYPOINT ["/wait-for-it.sh", "mysql:3306", "--"]
-CMD ["catalina.sh", "run"]
+# ENTRYPOINT ["/wait-for-it.sh", "mysql:3306", "--"]
+# CMD ["catalina.sh", "run"]

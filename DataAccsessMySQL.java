@@ -28,12 +28,8 @@ public class DataAccsessMySQL implements DataAccess{
 
 	public DataAccsessMySQL() {
 		try {
-			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -411,8 +407,6 @@ public class DataAccsessMySQL implements DataAccess{
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-
-			return null;
 		}
 
 
