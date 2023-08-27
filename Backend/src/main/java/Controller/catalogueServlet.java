@@ -1,7 +1,6 @@
 package Controller;
 
 import java.io.IOException;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -40,7 +39,6 @@ public class catalogueServlet extends HttpServlet {
 		response.addHeader("Access-Control-Allow-Origin","*");
 		DataAccsessMySQL db = new DataAccsessMySQL();
 		JsonObject tmp = Utilities.getJsonBody(request);
-		
 		
 		ArrayList<Item> catalogue = new ArrayList<Item>();
 		if(tmp != null) {

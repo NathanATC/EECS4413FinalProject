@@ -1,29 +1,34 @@
 package Controller;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+import javax.crypto.spec.PBEKeySpec;
 
 import Model.Account;
-
+import Model.Cart;
 import Model.Item;
 import Model.Order;
 
 public class DataAccsessMySQL implements DataAccess{
 
-	private final String connectionUrl = "jdbc:mysql://localhost:3306/database";
-	private final String dbUsername = "root";
+	private final String connectionUrl = "jdbc:mysql://mysql:3306/database";
+	private final String dbUsername = "Admin";
 	private final String dbPassword = "4413";
 
 
 	public DataAccsessMySQL() {
 		try {
+			Connection connection = DriverManager.getConnection(connectionUrl,dbUsername, dbPassword);
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -404,7 +409,7 @@ public class DataAccsessMySQL implements DataAccess{
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-			return null;
+			return [];
 		}
 
 
@@ -502,11 +507,10 @@ public class DataAccsessMySQL implements DataAccess{
 				lastID = results.getString("order_ID");
 				
 
+
 				
 			}
-		
 			connection.close();
-
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -713,7 +717,13 @@ public class DataAccsessMySQL implements DataAccess{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
+		
+		
+		
+		
+		
+		
 		
 	}
 
