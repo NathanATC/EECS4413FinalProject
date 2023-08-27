@@ -105,7 +105,6 @@ const ShoppingCart = () => {
           })}
           <div className="flex flex-row justify-around">
             <p>Total: ${Intl.NumberFormat("en-US").format(total)}</p>
-            <p>:)</p>
           </div>
           <div className="flex flex-row justify-around">
             <button

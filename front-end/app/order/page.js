@@ -1,8 +1,6 @@
 "use client";
 import { useLoginContext } from "../context/loginContext";
 
-import React, { useState } from "react";
-
 const Order = () => {
   const context = useLoginContext();
 
@@ -17,14 +15,6 @@ const Order = () => {
       body: body,
     });
   }
-
-  const [cardNum, setCardNum] = useState("");
-  const [cardExpire, setCardExpire] = useState("");
-  const [cvc, setCvc] = useState("");
-
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [address, setAddress] = useState("");
 
   return (
     <>
@@ -79,18 +69,24 @@ const Order = () => {
               />
             </div>
           </div>
-          <button>Submit Order!</button>
+          <button
+            onClick={async () => {
+              await placeOrder(context.userContext.username);
+            }}
+          >
+            Submit Order!
+          </button>
         </div>
       </div>
 
-      <button
+      {/* <button
         onClick={async () => {
           await placeOrder(context.userContext.username);
         }}
       >
         {" "}
         <b>place order</b>{" "}
-      </button>
+      </button> */}
     </>
   );
 };

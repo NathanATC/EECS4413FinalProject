@@ -22,7 +22,7 @@ const ItemDescriptionPopup = ({ item, isVisible, onClose }) => {
       const json = res.json();
       console.log(json);
     } else {
-      alert("type number dummy");
+      alert("type number");
     }
   }
 
