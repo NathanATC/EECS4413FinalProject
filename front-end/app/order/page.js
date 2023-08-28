@@ -14,6 +14,11 @@ const Order = () => {
       }),
       body: body,
     });
+    if (res.status == 200) {
+      alert("Order Placed!");
+    } else {
+      alert("Something went wrong");
+    }
   }
 
   return (
@@ -78,15 +83,6 @@ const Order = () => {
           </button>
         </div>
       </div>
-
-      {/* <button
-        onClick={async () => {
-          await placeOrder(context.userContext.username);
-        }}
-      >
-        {" "}
-        <b>place order</b>{" "}
-      </button> */}
     </>
   );
 };

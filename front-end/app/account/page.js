@@ -37,7 +37,10 @@ const AccountPage = () => {
             <button onClick={() => fetchOrders()}>Load Current Orders</button>
             {orders
               ? orders.map((order) => (
-                  <div className="flex flex-row gap-x-4 bg-[#bfdbfe] border-2 border-[#93c5fd]">
+                  <div
+                    key={order.orderID}
+                    className="flex flex-row gap-x-4 bg-[#bfdbfe] border-2 border-[#93c5fd]"
+                  >
                     {order.orderID}
                     <div>
                       {order.items.map((item) => (
